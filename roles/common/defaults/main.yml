@@ -1,6 +1,6 @@
 # Base default variables
 
-root_password: root # May be set in a secure vault instead
+common_root_password: root # May be set in a secure vault instead
 
 deploy_user_name: deploy
 deploy_password: xxx # May be set in a secure vault instead
