@@ -18,6 +18,11 @@ common_required_packages:
 
 common_optional_packages:
   - vim
+  - htop
+  - git-core
+  - rsync
+  - etckeeper
+  - tree
 
 ssh_port: 22
 ssh_allowed_users: Null

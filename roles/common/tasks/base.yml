@@ -6,3 +6,12 @@
 
 - name: Upgrade APT to the latest packages
   apt: upgrade=safe
+
+- name: Install required packages
+  apt: state=installed pkg={{ item }}
+  with_items: common_required_packages
+
+- name: Install optional packages
+  apt: state=installed pkg={{ item }}
+  with_items: common_optional_packages
+  when: with_optional_packages
