@@ -19,4 +19,7 @@ common_required_packages:
 common_optional_packages:
   - vim
 
-common_ssh_port: 22000
+ssh_port: 22
+ssh_allowed_users: Null
+ssh_allowed_groups:
+  - 'ssh'
