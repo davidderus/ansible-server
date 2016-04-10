@@ -24,7 +24,8 @@ common_optional_packages:
   - etckeeper
   - tree
 
-ssh_port: 22
+ssh_port:
+  - 22
 ssh_allowed_users: Null
 ssh_allowed_groups:
   - 'ssh'
