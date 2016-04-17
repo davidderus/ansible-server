@@ -7,3 +7,42 @@ deploy_public_keys:
   - ~/.ssh/id_rsa.pub
 
 with_deploy_user: True
+
+# Default variables for webservers
+
+with_apache2: False
+
+with_nginx: False
+nginx_workers: 2
+nginx_http_config: Null
+
+with_modphp5: False
+
+with_fpm: False
+fpm_pool_count: 1
+fpm_user: 'www-data'
+fpm_group: 'www-data'
+fpm_start_servers: 2
+fpm_max_children: 5
+fpm_min_spare_servers: 1
+fpm_max_spare_servers: 3
+
+with_php: False
+with_php_mysql_legacy: False
+
+phpsyscheck_vhostname: 'sys.localhost'
+phpsyscheck_vhostip: Null
+phpsyscheck_vhostport: 80
+
+php_config:
+  date.timezone: 'Europe/Paris'
+  short_open_tag: 'off'
+  expose_php: 'off'
+
+php_config_web:
+  display_errors: 'off'
+  display_startup_errors: 'off'
+  log_errors: 'on'
+  html_errors: 'off'
+
+with_php_apc: False
