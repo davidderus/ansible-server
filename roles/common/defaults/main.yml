@@ -24,3 +24,5 @@ ssh_port:
 ssh_allowed_users: Null
 ssh_allowed_groups:
   - 'ssh'
+
+ansible_prolog: True
