@@ -1,3 +1,4 @@
+---
 - name: Set up Postfix to relay mail
   debconf: name=postfix
            question='{{ item.question }}'

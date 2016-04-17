@@ -1,3 +1,4 @@
+---
 - name: Email logwatch summary daily
   lineinfile: dest=/etc/cron.daily/00logwatch
               regexp="^/usr/sbin/logwatch"

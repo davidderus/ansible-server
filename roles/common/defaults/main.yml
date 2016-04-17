@@ -1,3 +1,4 @@
+---
 # Base default variables
 
 common_root_password: root # May be set in a secure vault instead
