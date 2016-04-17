@@ -1,3 +1,3 @@
 ---
 - name: Adjust APT update intervals
-  copy: src=apt_periodic dest=/etc/apt/apt.conf.d/10periodic
+  template: src=security/apt_periodic dest=/etc/apt/apt.conf.d/10periodic owner=root group=root mode=0644
