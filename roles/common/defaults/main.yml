@@ -19,10 +19,12 @@ common_optional_packages:
   - etckeeper
   - tree
 
-ssh_port:
+ssh_ports:
   - 22
 ssh_allowed_users: Null
 ssh_allowed_groups:
   - 'ssh'
 
 ansible_prolog: True
+
+with_optional_packages: False
