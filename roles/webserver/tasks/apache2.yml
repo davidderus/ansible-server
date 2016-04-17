@@ -18,11 +18,11 @@
 
 - name: Install Apache2 basic security configuration (Debian < 8)
   template:
-    src: 'apache2/conf.d/security.j2'
-    dest: '/etc/apache2/conf.d/security'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
+    src: apache2/conf.d/security.j2
+    dest: /etc/apache2/conf.d/security
+    owner: root
+    group: root
+    mode: 0644
   notify:
     - Reload apache2
   when: ansible_os_family == "Debian" and ansible_lsb.major_release|int < 8
