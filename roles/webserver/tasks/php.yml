@@ -29,15 +29,6 @@
   file: path=/var/log/php state=directory owner=root group=root mode=0755
   when: with_fpm
 
-- name: Install PHP configuration for syslog
-  template: src={{ item.src }} dest={{ item.dest }} owner=root group=root mode=0644
-  with_items:
-    - { src: 'rsyslog/php-errors.conf.j2', dest: '/etc/rsyslog.d/php-errors.conf' }
-    - { src: 'logrotate/php-errors.j2', dest: '/etc/logrotate.d/php-errors' }
-  notify:
-      - Reload rsyslog for php
-  when: with_fpm
-
 - name: Install php5-fpm package
   apt: pkg=php5-fpm state=installed update_cache=yes
   when: with_fpm
