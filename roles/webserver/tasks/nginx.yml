@@ -72,18 +72,10 @@
     owner: root
     group: root
     mode: 0644
-  with_items: ssl_certs
+  with_items: "{{ ssl_certs }}"
   notify:
     - Reload nginx
   when: ssl_certs
-
-- name: Create basic authentication file for admin (Nginx)
-  template:
-    src: nginx/auth_admin.j2
-    dest: /etc/nginx/auth_admin
-    owner: root
-    group: www-data
-    mode: 0640
 
 # PHP Specific
 

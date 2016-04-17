@@ -15,6 +15,7 @@ with_apache2: False
 with_nginx: False
 nginx_workers: 2
 nginx_http_config: Null
+nginx_ssl_strengthened: False
 
 with_modphp5: False
 
@@ -46,3 +47,5 @@ php_config_web:
   html_errors: 'off'
 
 with_php_apc: False
+
+ssl_certs: Null
