@@ -1,3 +1,6 @@
 ---
 - include: deploy_user.yml
   when: with_deploy_user
+
+- include: apache2.yml
+  when: with_apache2

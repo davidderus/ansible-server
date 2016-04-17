@@ -1,0 +1,72 @@
+- name: Install Apache2 packages
+  apt:
+    pkg: apache2
+    state: installed
+    update_cache: yes
+  when: with_apache2
+
+- name: Ensure apache2 is running
+  service:
+    name: apache2
+    state: started
+
+# Warning: Debian specific config
+# TODO: Handle other os if need be
+
+- name: Install Apache2 basic security configuration (Debian < 8)
+  template:
+    src: 'apache2/conf.d/security.j2'
+    dest: '/etc/apache2/conf.d/security'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  notify:
+    - Reload apache2
+  when: ansible_os_family == "Debian" and ansible_lsb.major_release|int < 8
+
+- name: Install Apache2 basic security configuration (Debian >= 8)
+  template:
+    src: apache2/conf.d/security.j2
+    dest: /etc/apache2/conf-available/security.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload apache2
+  when: ansible_os_family == "Debian" and ansible_lsb.major_release|int >= 8
+
+# PHP specific
+
+- name: Install PHP system checks virtual host for Apache2 (sites-available)
+  template:
+    src: apache2/sys_vhost.j2
+    dest: /etc/apache2/sites-available/sys.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload apache2
+  when: with_php
+
+- name: Install PHP system checks virtual host for Apache2 (sites-enabled)
+  file:
+    src: /etc/apache2/sites-available/sys.conf
+    path: /etc/apache2/sites-enabled/sys.conf
+    state: link
+  notify:
+    - Reload apache2
+  when: with_php
+
+# Other tasks
+
+- name: Install SSL vhost configuration for Apache
+  template:
+    src: apache2/vhost_ssl.j2
+    dest: /etc/apache2/vhost_ssl-{{ item }}.conf
+    owner: root
+    group: root
+    mode: 0644
+  with_items: ssl_certs
+  notify:
+    - Reload apache2
+  when: ssl_certs
