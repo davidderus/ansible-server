@@ -1,0 +1,115 @@
+---
+# Partially pulled from https://git.openics.org/kolter/ansible-playbooks/
+
+- name: Install nginx package
+  apt:
+    pkg: nginx
+    state: installed
+    update_cache: yes
+
+- name: Install nginx default file configuration
+  template:
+    src: nginx/default.j2
+    dest: /etc/default/nginx
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart nginx
+
+- name: Install custom mime types for nginx
+  template:
+    src: nginx/mime.types.custom.j2
+    dest: /etc/nginx/mime.types.custom
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart nginx
+
+- name: Install nginx configuration
+  template:
+    src: nginx/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart nginx
+
+- name: Install additional nginx configuration params (conf.d/)
+  template:
+    src: nginx/conf.d/{{ item }}.conf.j2
+    dest: /etc/nginx/conf.d/{{ item }}.conf
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - status
+  notify:
+    - Reload nginx
+
+- name: Install additional nginx configuration params (vhost_*)
+  template:
+    src: nginx/vhost_{{ item }}.j2
+    dest: /etc/nginx/vhost_{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - all
+    - expires
+    - cache-fd
+    - protect-files
+    - security
+  notify:
+    - Reload nginx
+
+- name: Install SSL vhost configuration for Nginx
+  template:
+    src: nginx/vhost_ssl.j2
+    dest: /etc/nginx/vhost_ssl-{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  with_items: ssl_certs
+  notify:
+    - Reload nginx
+  when: ssl_certs
+
+- name: Create basic authentication file for admin (Nginx)
+  template:
+    src: nginx/auth_admin.j2
+    dest: /etc/nginx/auth_admin
+    owner: root
+    group: www-data
+    mode: 0640
+
+# PHP Specific
+
+- name: Install PHP system checks virtual host for nginx (sites-available)
+  template:
+    src: nginx/sys_vhost.j2
+    dest: /etc/nginx/sites-available/sys
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload nginx
+  when: with_php
+
+- name: Install PHP system checks virtual host for nginx (sites-enabled)
+  file:
+    src: /etc/nginx/sites-available/sys
+    path: /etc/nginx/sites-enabled/sys
+    state: link
+  notify:
+    - Reload nginx
+  when: with_php
+
+# Others
+
+- name: Ensure nginx is running
+  service:
+    name: nginx
+    state: started
