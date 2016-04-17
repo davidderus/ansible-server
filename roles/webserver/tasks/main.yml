@@ -7,3 +7,6 @@
 
 - include: nginx.yml
   when: with_nginx
+
+- include: php.yml
+  when: with_php
