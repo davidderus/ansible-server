@@ -1,0 +1,13 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog(';') }}
+{% endif -%}
+;
+; local PHP configuration overrides for php-cli
+;
+{% if php_local_config is defined %}
+{% set _dummy = php_config.update(php_local_config) %}
+{% endif %}
+{% for key in php_config %}
+{{ key }} = {{ php_config[key] }}
+{% endfor %}

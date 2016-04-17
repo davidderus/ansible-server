@@ -1,0 +1,12 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog(';') }}
+{% endif -%}
+short_open_tag  =   Off
+open_basedir    =   /var/www:/tmp
+upload_tmp_dir  =   /tmp
+display_errors  =   Off
+log_errors      =   On
+error_log       =   syslog
+enable_dl       =   Off
+expose_php      =   Off

@@ -1,0 +1,12 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+
+upstream fpm-backend {
+    # Depending on the IP ensure that the same server will handle the request
+    #ip_hash;
+{% for num in range(0, fpm_pool_count, 1) %}
+    server unix:/var/run/php5-fpm-pool-www{{ num }}.sock;
+{% endfor %}
+}
