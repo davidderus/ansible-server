@@ -2,13 +2,7 @@
 
 common_root_password: root # May be set in a secure vault instead
 
-deploy_user_name: deploy
-deploy_password: xxx # May be set in a secure vault instead
-
 logwatch_email: youremail@example.com
-
-common_deploy_public_keys:
-  - ~/.ssh/id_rsa.pub
 
 common_required_packages:
   - ufw
