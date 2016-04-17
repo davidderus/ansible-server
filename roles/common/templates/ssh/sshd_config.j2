@@ -104,8 +104,3 @@ AllowUsers {{ ssh_allowed_users | join(' ') }}
 # Define users groups allowed to login
 AllowGroups {{ ssh_allowed_groups | join(' ') }}
 {% endif %}
-
-{% if ssh_local_config is defined and ssh_local_config %}
-# Additional parameters
-{{ ssh_local_config|join('\n') }}
-{% endif %}

@@ -22,7 +22,8 @@ common_optional_packages:
 ssh_port: 22
 ssh_allowed_users: Null
 ssh_allowed_groups:
-  - 'ssh'
+  - root
+  - ssh
 
 ansible_prolog: True
 
