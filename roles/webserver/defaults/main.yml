@@ -11,6 +11,7 @@ with_deploy_user: True
 # Default variables for webservers
 
 with_apache2: False
+apache2_ssl_strengthened: False
 
 with_nginx: False
 nginx_workers: 2
