@@ -8,3 +8,8 @@ mysql_root_password: Null
 # PostgreSQL
 with_postgresql: False
 with_postgresql_backup: True
+
+# Redis
+with_redis: False
+redis_port: 6379
+redis_password: Null
