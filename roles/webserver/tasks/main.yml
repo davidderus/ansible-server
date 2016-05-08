@@ -10,3 +10,5 @@
 
 - include: php.yml
   when: with_php
+
+- include: firewall.yml
