@@ -5,3 +5,6 @@
 
 - include: postgresql.yml
   when: with_postgresql
+
+- include: redis.yml
+  when: with_redis
