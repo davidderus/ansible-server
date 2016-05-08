@@ -26,6 +26,3 @@ ssh_allowed_users: Null
 ssh_allowed_groups:
   - root
   - ssh
-
-ansible_prolog: True
-ansible_master: root@localhost
