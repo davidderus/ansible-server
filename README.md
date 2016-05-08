@@ -2,20 +2,21 @@
 
 ## Components
 
-- Common
-- Web Server
-  - Apache2
-  - Nginx
-  - PHP
-    - PHP-FPM
-    - PHP-APC
-  - Rails
-- DB Server
-  - MySQL
-  - PostgreSQL
-- Queue Server
-  - Beanstalkd
-  - Sidekiq
+- [x] Common
+- [ ] Web Server
+  - [x] Apache2
+  - [x] Nginx
+  - [x] PHP
+    - [x] PHP-FPM
+    - [x] PHP-APC
+  - [x] Rails
+- [ ] DB Server
+  - [x] MySQL
+  - [x] PostgreSQL
+  - [ ] Redis
+- [ ] Queue Server
+  - [ ] Beanstalkd
+  - [ ] Sidekiq
 
 ## Usage
 
