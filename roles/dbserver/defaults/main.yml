@@ -1,1 +1,15 @@
 ---
+
+# MySQL
+with_mysql: False
+with_mysql_backup: True
+mysql_root_password: Null
+
+# PostgreSQL
+with_postgresql: False
+with_postgresql_backup: True
+
+# Redis
+with_redis: False
+redis_user: redis
+redis_install_dir: /opt/redis
