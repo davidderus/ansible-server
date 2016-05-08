@@ -1,0 +1,7 @@
+---
+
+- include: mysql.yml
+  when: with_mysql
+
+- include: postgresql.yml
+  when: with_postgresql
