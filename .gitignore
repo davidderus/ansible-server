@@ -3,3 +3,5 @@ hosts
 ansible.cfg
 site.yml
 site.retry
+
+group_vars
