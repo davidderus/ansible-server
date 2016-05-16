@@ -1,5 +1,12 @@
 # Ansible Server playbook
 
+## Warning
+
+**This is a beta, use at your own risk**.
+
+Some roles are not tested at all (*for now*). All PRs are welcome to make
+it improve.
+
 ## Components
 
 - [x] Common
