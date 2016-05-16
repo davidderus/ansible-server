@@ -1,0 +1,8 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+#
+# fpm default file for php5-fpm init script
+#
+DAEMON_ARGS="--fpm-config /etc/php5/fpm/php-fpm.conf --define error_log=syslog"

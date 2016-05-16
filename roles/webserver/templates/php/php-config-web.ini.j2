@@ -1,0 +1,19 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog(';') }}
+{% endif -%}
+;
+; local PHP configuration override for apache2
+;
+{% if php_local_config is defined %}
+{% set _dummy = php_config.update(php_local_config) %}
+{% endif %}
+{% if php_config_web is defined %}
+{% set _dummy = php_config.update(php_config_web) %}
+{% endif %}
+{% if php_local_config_web is defined %}
+{% set _dummy = php_config.update(php_local_config_web) %}
+{% endif %}
+{% for key in php_config %}
+{{ key }} = {{ php_config[key] }}
+{% endfor %}

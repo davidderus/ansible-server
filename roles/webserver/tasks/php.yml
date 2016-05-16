@@ -1,0 +1,112 @@
+---
+# Pulled from https://git.openics.org/kolter/ansible-playbooks/raw/master/roles/webserver/tasks/php.yml
+
+- name: Install common PHP dependencies
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - php5-cli
+    - php5-curl
+    - php5-gd
+    - php5-intl
+    - php5-mcrypt
+    - php-mime-type
+    - php5-pgsql
+    - php5-sqlite
+
+- name: Install local PHP configuration overrides for php5-cli (Debian >= 8)
+  template: src=php/php-config-cli.ini.j2 dest=/etc/php5/cli/conf.d/99-local-config.ini owner=root group=root mode=0644
+  when: ansible_lsb.major_release|int >= 8
+
+- name: Create system checks directory /etc/php5/syscheck.d
+  file: path=/etc/php5/syscheck.d owner=root group=root mode=0755 state=directory
+
+- name: Install phpinfo system check
+  template: src=php/phpinfo.php dest=/etc/php5/syscheck.d/index.php owner=root group=root mode=0644
+
+# PHP FPM
+
+- name: Create PHP log directory
+  file: path=/var/log/php state=directory owner=root group=root mode=0755
+  when: with_fpm
+
+- name: Install php5-fpm package
+  apt: pkg=php5-fpm state=installed update_cache=yes
+  when: with_fpm
+
+- name: Install php5-fpm init script config file
+  template: src=fpm/default.j2 dest=/etc/default/php5-fpm owner=root group=root mode=0644
+  notify:
+      - Restart php5-fpm
+  when: with_fpm
+
+- name: Configure php5-fpm
+  lineinfile: dest=/etc/php5/fpm/php-fpm.conf regexp="^{{item.key}}\s*=.*$" line="{{item.key}} = {{item.value}}" insertafter="^;{{item.key}}"
+  with_items:
+    - { key: 'error_log', value: 'syslog' }
+    - { key: 'log_level', value: 'warning' }
+    - { key: 'emergency_restart_threshold', value: '100' }
+    - { key: 'emergency_restart_interval', value: '5s' }
+    - { key: 'rlimit_files', value: '262144' }
+    - { key: 'events.mechanism', value: 'epoll' }
+    - { key: 'include', value: '/etc/php5/fpm/pool.d/local-pool.cnf' }
+  when: with_fpm
+
+- name: Install php5-fpm pools configuration file
+  template: src=fpm/php-fpm-pools.conf.j2 dest=/etc/php5/fpm/pool.d/local-pool.cnf owner=root group=root mode=0644
+  notify:
+      - Restart php5-fpm
+  when: with_fpm
+
+- name: Install local PHP configuration overrides for php5-fpm (Debian >= 8)
+  template: src=php/php-config-web.ini.j2 dest=/etc/php5/fpm/conf.d/99-local-config.ini owner=root group=root mode=0644
+  when: with_fpm and ansible_lsb.major_release|int >= 8
+
+- name: Install nginx config files for php5-fpm (fpm servers pool)
+  template: src=fpm/nginx/fpm-pool.conf.j2 dest=/etc/nginx/conf.d/fpm-pool.conf owner=root group=root mode=0644
+  notify:
+      - Reload nginx
+  when: with_fpm and with_nginx
+
+- name: Install nginx config files for php5-fpm (fpm fastcgi config)
+  template: src=fpm/nginx/fastcgi_pass_fpm.j2 dest=/etc/nginx/fastcgi_pass_fpm owner=root group=root mode=0644
+  notify:
+      - Reload nginx
+  when: with_fpm and with_nginx
+
+- name: Ensure php5-fpm is running
+  service: name=php5-fpm state=started
+  when: with_fpm
+
+# PHP APC
+
+- name: Install PHP APC extension
+  apt: pkg=php-apc state=installed update_cache=yes
+  when: with_php_apc
+
+- name: Install php-apc system check
+  template: src=php/apc.php dest=/etc/php5/syscheck.d/apc.php owner=root group=root mode=0644
+  when: with_php_apc
+
+# MOD PHP for apache2
+
+- name: Install mod_php5 packages for apache2
+  apt: pkg=libapache2-mod-php5 state=installed update_cache=yes
+  when: with_modphp5
+
+- name: Install local PHP configuration (Debian < 8)
+  template: src=php/php-config-web.ini.j2 dest=/etc/php5/conf.d/99-local-config.ini owner=root group=root mode=0644
+  when: with_modphp5 and ansible_lsb.major_release|int < 8
+
+- name: Install local PHP apache2 configuration (Debian >= 8)
+  template: src=php/php-config-web.ini.j2 dest=/etc/php5/apache2/conf.d/99-local-config.ini owner=root group=root mode=0644
+  when: with_modphp5 and ansible_lsb.major_release|int >= 8
+
+# Others
+
+- name: Install MySQL extension for PHP (native driver)
+  apt: pkg=php5-mysqlnd state=installed update_cache=yes
+  when: not with_php_mysql_legacy
+
+- name: Install MySQL extension for PHP (old driver)
+  apt: pkg=php5-mysql state=installed update_cache=yes
+  when: with_php_mysql_legacy

@@ -1,0 +1,12 @@
+---
+# Example: A site file for local vagrant
+
+- name: all-in-one vagrant webserver configuration
+  hosts: local
+  remote_user: vagrant
+  become: true
+
+  roles:
+    - common
+    - webserver
+    - dbserver

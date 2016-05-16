@@ -1,0 +1,6 @@
+{% if http_auth_admin_password %}
+admin:{{ http_auth_admin_password }}
+{% endif %}
+{% if http_auth_user_name and http_auth_user_password %}
+{{ http_auth_user_name }}:{{ http_auth_user_password }}
+{% endif %}

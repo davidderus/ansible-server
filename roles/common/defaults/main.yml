@@ -1,0 +1,28 @@
+---
+# Base default variables
+
+common_root_password: root # May be set in a secure vault instead
+
+logwatch_email: youremail@example.com
+
+common_required_packages:
+  - ufw
+  - fail2ban
+  - unattended-upgrades
+  - logwatch
+
+common_optional_packages:
+  - vim
+  - htop
+  - git-core
+  - rsync
+  - etckeeper
+  - tree
+
+with_optional_packages: False
+
+ssh_port: 22
+ssh_allowed_users: Null
+ssh_allowed_groups:
+  - root
+  - ssh

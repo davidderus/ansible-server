@@ -1,0 +1,25 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog(';') }}
+{% endif -%}
+;
+; PHP configuration
+;
+
+{% if php_config is defined %}
+;
+; Main settings
+;
+{% for param in php_config %}
+{{ param.key }} = {{ param.value }}
+{% endfor %}
+{% endif %}
+
+{% if php_local_config is defined %}
+;
+; This host overrides
+;
+{% for param in php_local_config %}
+{{ param.key }} = {{ param.value }}
+{% endfor %}
+{% endif %}

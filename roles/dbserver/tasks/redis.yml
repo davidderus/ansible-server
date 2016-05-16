@@ -1,0 +1,53 @@
+---
+
+- name: ensure packages are installed
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
+    - make
+    - build-essential
+    - tcl8.5
+
+- name: download latest stable redis
+  get_url: url=http://download.redis.io/redis-stable.tar.gz dest=/tmp/redis-stable.tar.gz
+
+- name: extract redis tarball
+  unarchive:
+    src: /tmp/redis-stable.tar.gz
+    dest: /tmp
+    copy: no
+
+- name: compile redis
+  command: make -j{{ ansible_processor_cores + 1 }}
+  args:
+    chdir: /tmp/redis-stable
+    creates: /tmp/redis-stable/src/redis-server
+
+- name: create redis install directory
+  file:
+    path: "{{ redis_install_dir }}"
+    state: directory
+
+- name: create /etc/redis
+  file:
+    path: /etc/redis
+    state: directory
+
+- name: add redis user
+  user:
+    name: "{{ redis_user }}"
+    comment: "Redis"
+    home: "{{ redis_install_dir }}"
+    shell: /bin/false
+    system: yes
+
+- name: install redis
+  command: make PREFIX={{ redis_install_dir }} install
+  args:
+    chdir: /tmp/redis-stable
+    creates: "{{ redis_install_dir }}/bin/redis-server"
+
+- name: cleaning up build files
+    command: rm -rf /tmp/{{ item }}
+    with_items:
+      - redis-stable
+      - redis-stable.tar.gz

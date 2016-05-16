@@ -1,0 +1,16 @@
+---
+- name: Install MySQL server related packages
+  apt: pkg={{ item }} state=installed update_cache=yes
+  with_items:
+    - mysql-server
+
+- name: Install MySQL backup related packages (automysqlbackup)
+  apt: pkg=automysqlbackup state=installed update_cache=yes
+  when: with_mysql_backup
+
+- name: Change MySQL root default password
+  raw: if ! echo "SELECT VERSION();" | mysql -u root --password='{{ mysql_root_password }}' >/dev/null 2>&1 ; then echo "UPDATE mysql.user SET Password=PASSWORD('{{ mysql_root_password }}') WHERE User IN ('', 'root'); FLUSH PRIVILEGES;" | mysql --defaults-file=/etc/mysql/debian.cnf ; fi
+  when: mysql_root_password
+
+- name: Ensure MySQL is running
+  service: name=mysql state=started

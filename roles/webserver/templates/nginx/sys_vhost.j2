@@ -1,0 +1,25 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+# Nginx vhost for PHP system checks
+
+server {
+    listen {%if phpsyscheck_vhostip %}{{ phpsyscheck_vhostip }}:{% endif %}{{ phpsyscheck_vhostport }};
+
+    server_name {{ phpsyscheck_vhostname }};
+
+    access_log  /var/log/nginx/sys.access.log;
+    error_log   /var/log/nginx/sys.error.log;
+
+    root /etc/php5/syscheck.d;
+    index index.php;
+    try_files $uri $uri/ /index.php;
+
+    auth_basic "Restricted Access";
+    auth_basic_user_file /etc/nginx/auth_admin;
+
+    location ~ \.php(/|$) {
+        include fastcgi_pass_fpm;
+    }
+}

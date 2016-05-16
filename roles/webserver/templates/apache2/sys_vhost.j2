@@ -1,0 +1,31 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+# Apache vhost for PHP system checks
+
+<VirtualHost {%if phpsyscheck_vhostip %}{{ phpsyscheck_vhostip }}{% else %}*{% endif %}:{{ phpsyscheck_vhostport }}>
+    ServerName {{ phpsyscheck_vhostname }}
+
+    DocumentRoot /etc/php5/syscheck.d
+    DirectoryIndex index.php
+
+    <Location />
+        AuthType basic
+        AuthName "Restricted Access"
+        AuthUserFile /etc/apache2/auth_admin
+        Require valid-user
+    </Location>
+
+    <Directory /etc/php5/syscheck.d>
+        Options None
+        AllowOverride None
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    LogLevel warn
+    CustomLog ${APACHE_LOG_DIR}/sys.access.log combined
+    ErrorLog ${APACHE_LOG_DIR}/sys.error.log
+
+</VirtualHost>

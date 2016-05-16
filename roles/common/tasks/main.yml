@@ -1,0 +1,7 @@
+---
+- include: base.yml
+- include: ssh.yml
+- include: security.yml
+- include: firewall.yml
+- include: postfix.yml
+- include: logwatch.yml

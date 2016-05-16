@@ -1,0 +1,44 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+#
+# Expirerules for static content
+#
+
+# cache.appcache, your document html and data
+location ~* \.(?:manifest|appcache|html?|xml|json)$ {
+    expires -1;
+}
+
+# Feeds
+location ~* \.(?:rss|atom)$ {
+    expires 1h;
+    add_header Cache-Control "public";
+    add_header X-Content-Type-Options "nosniff";
+}
+
+# Media: images, icons, video, audio, HTC
+location ~* \.(?:jpg|jpeg|gif|png|ico|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
+    expires 1M;
+    access_log off;
+    add_header Cache-Control "public";
+    add_header X-Content-Type-Options "nosniff";
+}
+
+# Web fonts
+location ~* \.(?:ttf|ttc|otf|eot|woff|woff2)$ {
+    expires 1M;
+    access_log off;
+    add_header Cache-Control "public";
+    add_header "Access-Control-Allow-Origin" "*";
+    add_header X-Content-Type-Options "nosniff";
+}
+
+# CSS and Javascript
+location ~* \.(?:css|js)$ {
+    expires 2M;
+    access_log off;
+    add_header Cache-Control "public";
+    add_header X-Content-Type-Options "nosniff";
+}

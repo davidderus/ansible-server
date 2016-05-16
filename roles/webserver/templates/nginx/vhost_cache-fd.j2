@@ -1,0 +1,11 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+#
+# Add some cache on file descriptors
+#
+open_file_cache          max=1000 inactive=20s;
+open_file_cache_valid    30s;
+open_file_cache_min_uses 2;
+open_file_cache_errors   on;

@@ -1,0 +1,16 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+#
+# Various security rules
+#
+
+# Clickjacking protection
+add_header X-Frame-Options "sameorigin";
+
+# Cross-site scripting (XSS) filter
+add_header X-XSS-Protection "1; mode=block";
+
+# Prevents from MIME-sniffing a response away from the declared content-type
+add_header X-Content-Type-Options "nosniff";

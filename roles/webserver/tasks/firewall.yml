@@ -1,0 +1,7 @@
+---
+- name: Allow unencrypted web traffic
+  ufw: rule=allow port=80 proto=tcp
+
+- name: Allow encrypted web traffic
+  ufw: rule=allow port=443 proto=tcp
+  when: ssl_certs

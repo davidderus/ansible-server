@@ -1,0 +1,14 @@
+---
+- include: deploy_user.yml
+  when: with_deploy_user
+
+- include: apache2.yml
+  when: with_apache2
+
+- include: nginx.yml
+  when: with_nginx
+
+- include: php.yml
+  when: with_php
+
+- include: firewall.yml

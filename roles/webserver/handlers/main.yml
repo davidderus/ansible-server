@@ -1,0 +1,9 @@
+---
+- include: apache2.yml
+  when: with_apache2
+
+- include: nginx.yml
+  when: with_nginx
+
+- include: fpm.yml
+  when: with_fpm

@@ -1,0 +1,9 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog(';') }}
+{% endif -%}
+display_errors  =   Off
+log_errors      =   On
+error_log       =   syslog
+enable_dl       =   Off
+expose_php      =   Off

@@ -1,0 +1,4 @@
+SSLEngine On
+SSLCertificateFile /etc/ssl/local/certs/{{ item }}/cert.pem
+SSLCertificateKeyFile /etc/ssl/local/certs/{{ item }}/privkey.pem
+SSLCertificateChainFile /etc/ssl/local/certs/{{ item }}/chain.pem

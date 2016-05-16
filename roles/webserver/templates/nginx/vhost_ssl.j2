@@ -1,0 +1,3 @@
+ssl_certificate /etc/ssl/local/certs/{{ item }}/fullchain.pem;
+ssl_certificate_key /etc/ssl/local/certs/{{ item }}/privkey.pem;
+ssl_trusted_certificate /etc/ssl/local/certs/{{ item }}/chain.pem;

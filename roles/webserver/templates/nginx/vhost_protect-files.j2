@@ -1,0 +1,15 @@
+{% if ansible_prolog -%}
+{% from 'templates/ansible/prolog.j2' import prolog with context %}
+{{ prolog() }}
+{% endif -%}
+#
+# Protect hidden files and directories
+#
+
+location ~* (?:^|/)\. {
+    deny all;
+}
+
+location ~* (?:\.(?:bak|config|sql|fla|psd|ini|log|sh|inc|swp|dist)|~)$ {
+    deny all;
+}
